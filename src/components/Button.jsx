@@ -443,7 +443,7 @@ const handleSubmit = async (e) => {
           type: "spring",
           stiffness: 200,
         }}
-        className="inline-block  hover:scale-105 mt-4 transition-transform p-[1.5px] rounded-xl "
+        className="inline-block  hover:scale-105  transition-transform p-[1.5px] rounded-xl "
         style={{
           background: `linear-gradient(to right, ${gradientFrom}, ${gradientTo})`,
         }}
