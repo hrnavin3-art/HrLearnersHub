@@ -75,7 +75,7 @@ const Navbar = () => {
         {/* LOGO */}
         <button
           onClick={() => handleScroll("home")}
-          className="w-16 h-16 flex items-center justify-center shrink-0"
+          className="w-20 h-20 flex items-center justify-center shrink-0"
           aria-label="Go to Home"
         >
           <img
@@ -86,7 +86,7 @@ const Navbar = () => {
         </button>
 
         {/* DESKTOP NAVIGATION */}
-        <nav className="hidden md:flex items-center gap-8 text-sm">
+        <nav className="hidden md:flex items-center gap-8 text-base">
           {navItems.map((item) => (
             <button
               key={item.id}
