@@ -295,10 +295,10 @@ export default function CTASection() {
                 border-white/20
                 bg-white/10
                 backdrop-blur-md
-                px-10
+                px-8
                 md:px-14
                 py-3
-                
+                text-base
                 rounded-xl
                 text-white
                 transition

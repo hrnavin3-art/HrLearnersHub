@@ -455,11 +455,12 @@ const handleSubmit = async (e) => {
             backgroundColor: buttonBg,
           }}
           className={`
-            px-8
-            py-3 
+            md:px-8
+            md:py-3 
+            px-6 py-3
             rounded-xl
             text-sm
-            lg:text-xl
+            lg:text-lg
             flex
             items-center
             gap-2
