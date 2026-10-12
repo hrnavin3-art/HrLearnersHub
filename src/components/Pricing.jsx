@@ -493,7 +493,7 @@ const Pricing = () => {
                 </motion.button> */}
 
                
-                  <div className="flex items-center justify-center">
+                  <div className="flex items-center justify-center mt-4">
                     <CTAButtonPopup buttonText="Enroll now "  className='   text-white font-medium '  />
                   </div>
               
@@ -544,14 +544,14 @@ const Pricing = () => {
                   💳 Flexible EMI Options
                 </h3>
 
-                <p className="text-white/70 mt-3 leading-relaxed text-sm md:text-lg">
+                <p className="text-white/70 mt-3 leading-relaxed text-sm mb-4 md:text-lg">
                   Weekly EMI: ₹1,500 – ₹2,500
                   <br />
                   One-time / Two-split / EMI available.
                 </p>
               </div>
 
-              <div className="bg-white/10 border border-white/10 lg:rounded-2xl rounded-lg px-3 md:px-6 py-2 md:py-5 backdrop-blur-xl">
+              <div className="bg-white/10 border border-white/10 lg:rounded-2xl md:mb-0 mb-4  rounded-lg px-3 md:px-6 py-2 md:py-5 backdrop-blur-xl">
                 <p className="md:text-lg text-xs font-semibold leading-relaxed">
                   Money should never stop your career growth.
                 </p>

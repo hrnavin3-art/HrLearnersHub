@@ -342,7 +342,7 @@ const ReviewCard = ({ name, text, accentHex }) => (
                   viewport={{ once: true }}
                   className="md:col-span-5"
                 >
-                  <p className="text-gray-600 text-sm md:text-xl leading-relaxed">
+                  <p className="text-gray-600 text-sm md:text-xl leading-relaxed mb-4">
                     HR Learners Hub delivers hands-on, placement-focused HR
                     training with real IT hiring, sourcing, communication, and
                     AI tools to make you job-ready.
@@ -353,7 +353,7 @@ const ReviewCard = ({ name, text, accentHex }) => (
                     buttonBg="#000000"
                     gradientFrom="#B1E635"
                     gradientTo="#ffffff"
-                    className=" text-white "
+                    className=" text-white  "
                   // submitBtnBg="#B1E635"
                   />
                 </motion.div>
@@ -535,7 +535,7 @@ const ReviewCard = ({ name, text, accentHex }) => (
 
                     <motion.p
                       variants={blurReveal}
-                      className=" text-gray-300 md:mt-10 mt-5  text-base lg:text-3xl"
+                      className=" text-gray-300 md:mt-10 mt-5 mb-4 text-base lg:text-3xl"
                     >
                       <span>Result : </span>
                       You don’t feel like a{" "}
@@ -751,7 +751,7 @@ const ReviewCard = ({ name, text, accentHex }) => (
             {/* Subtext */}
             <motion.p
               variants={fadeUp}
-              className="mt-8 text-sm md:text-xl text-gray-700"
+              className="mt-8 text-sm md:text-xl mb-4 text-gray-700"
             >
               We Don't Promise Shortcuts.{" "}
               <span className="text-blue-600 font-medium">

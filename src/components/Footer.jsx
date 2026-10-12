@@ -298,7 +298,7 @@ export default function CTASection() {
                 px-10
                 md:px-14
                 py-3
-                mt-4
+                
                 rounded-xl
                 text-white
                 transition

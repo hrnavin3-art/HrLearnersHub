@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 
@@ -49,7 +50,20 @@
 
   <meta name="theme-color" content="#0F172A" />
 
-  <!-- Google Analytics -->
+  <!-- Google Ads Tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18489691117"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'AW-18489691117');
+  </script>
+
+  <!-- Google Analytics (Optional) -->
   <!--
   <script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA_ID"></script>
   <script>
@@ -61,7 +75,7 @@
   </script>
   -->
 
-  <!-- Microsoft Clarity -->
+  <!-- Microsoft Clarity (Optional) -->
   <!--
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
@@ -72,7 +86,7 @@
   </script>
   -->
 
-  <!-- Meta Pixel -->
+  <!-- Meta Pixel (Optional) -->
   <!--
   <script>
     !function(f,b,e,v,n,t,s){
@@ -91,7 +105,7 @@
       s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s);
     }(window, document, 'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
+      'https://connect.facebook.net/en_US/fbevents.js');
 
     fbq('init', 'YOUR_PIXEL_ID');
     fbq('track', 'PageView');
@@ -102,7 +116,7 @@
 
 <body>
 
-  <!-- Meta Pixel (NoScript) -->
+  <!-- Meta Pixel NoScript (Optional) -->
   <!--
   <noscript>
     <img
@@ -110,6 +124,7 @@
       width="1"
       style="display:none"
       src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"
+      alt=""
     />
   </noscript>
   -->

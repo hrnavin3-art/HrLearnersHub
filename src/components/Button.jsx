@@ -58,6 +58,7 @@ export default function CTAButtonPopup({
   };
 
 
+
 const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -70,14 +71,8 @@ const handleSubmit = async (e) => {
     formBody.append("phone", formData.phone);
     formBody.append("email", formData.email);
     formBody.append("completionYear", formData.completionYear);
-    formBody.append(
-      "degreeDepartment",
-      formData.degreeDepartment
-    );
-    formBody.append(
-      "committedToHR",
-      formData.committedToHR
-    );
+    formBody.append("degreeDepartment", formData.degreeDepartment);
+    formBody.append("committedToHR", formData.committedToHR);
     formBody.append(
       "interestedInPaidProgram",
       formData.interestedInPaidProgram
@@ -89,7 +84,14 @@ const handleSubmit = async (e) => {
       mode: "no-cors",
     });
 
-    // Show success state on button
+    // Google Ads conversion tracking
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "conversion", {
+        send_to: "AW-18489691117/nJfJCM2yqI8dEO2XyfBE",
+      });
+    }
+
+    // Show success state
     setIsSubmitting("success");
 
     // Reset form
@@ -103,7 +105,7 @@ const handleSubmit = async (e) => {
       interestedInPaidProgram: "",
     });
 
-    // Keep success message visible for 2 seconds
+    // Close popup after 2 seconds
     setTimeout(() => {
       setOpen(false);
       setIsSubmitting(false);
@@ -112,15 +114,14 @@ const handleSubmit = async (e) => {
   } catch (error) {
     console.error("Form submission error:", error);
 
-    // Show error state on button
     setIsSubmitting("error");
 
-    // Keep error message visible for 2 seconds
     setTimeout(() => {
       setIsSubmitting(false);
     }, 2000);
   }
 };
+
 
 
 
@@ -443,7 +444,7 @@ const handleSubmit = async (e) => {
           type: "spring",
           stiffness: 200,
         }}
-        className="inline-block  hover:scale-105 mt-4 transition-transform p-[1.5px] rounded-xl "
+        className="inline-block  hover:scale-105  transition-transform p-[1.5px] rounded-xl "
         style={{
           background: `linear-gradient(to right, ${gradientFrom}, ${gradientTo})`,
         }}
