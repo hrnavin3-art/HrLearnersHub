@@ -4,20 +4,35 @@ import { Menu, X } from "lucide-react";
 import CTAButtonPopup from "./Button";
 
 
+
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("home");
+  
+
+
 
   const navItems = [
     { id: "home", label: "Home" },
     { id: "company", label: "Company" },
     { id: "feature", label: "Feature" },
     { id: "pricing", label: "Pricing" },
+    { id: "blog", label: "Blog" },
     // { id: "career", label: "Career" },
   ];
 
   // Scroll to section
   const handleScroll = (id) => {
+
+    if (id === "blog") {
+    window.open(
+      "https://old.hrlearnershub.com/blog-online-course-v1/",
+      "_blank",
+      "noopener,noreferrer"
+    );
+    setOpen(false);
+    return;
+  }
     const section = document.getElementById(id);
 
     if (section) {
