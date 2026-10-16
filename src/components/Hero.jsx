@@ -113,7 +113,7 @@ const Hero = () => {
     bg-white/10
     border border-white/20
     items-center gap-3 justify-center
-    rounded-full mb-6
+    rounded-full mb-6 mt-6
   "
 >
   <img
