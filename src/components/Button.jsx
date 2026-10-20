@@ -87,7 +87,7 @@ const handleSubmit = async (e) => {
     // Google Ads conversion tracking
     if (typeof window.gtag === "function") {
       window.gtag("event", "conversion", {
-        send_to: "AW-18489691117/nJfJCM2yqI8dEO2XyfBE",
+        send_to: "AW-18488012702/jWXxCNnejaMdEJ7f4u9E",
       });
     }
 
