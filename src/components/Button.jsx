@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -6,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
 const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbwhqIQrL0LVMPw0EomXnNxe8uDq3VnNa4TUtjar_uNV_Z6wJnKf-pqwMhPxkVXy0x_E/exec";
+  "https://script.google.com/macros/s/AKfycbx6l764dWsOGEM4GadbS81TpolfHrMdr8PO44z_dqJs2XXnpu6w8dPSwij0U4yvIPUNjw/exec";
 
 export default function CTAButtonPopup({
   buttonText = "Book Your Seat Now",
@@ -15,7 +16,7 @@ export default function CTAButtonPopup({
   gradientTo = "transparent",
   submitBtnBg = "#4043FE",
   className = "text-white",
-})  {
+}) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -57,78 +58,106 @@ export default function CTAButtonPopup({
     }));
   };
 
+  // =====================================
+  // FORM SUBMISSION
+  // =====================================
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+    if (isSubmitting === true) return;
 
-  setIsSubmitting(true);
+    setIsSubmitting(true);
 
-  try {
-    const formBody = new URLSearchParams();
+    try {
+      const formBody = new URLSearchParams();
 
-    formBody.append("fullName", formData.fullName);
-    formBody.append("phone", formData.phone);
-    formBody.append("email", formData.email);
-    formBody.append("completionYear", formData.completionYear);
-    formBody.append("degreeDepartment", formData.degreeDepartment);
-    formBody.append("committedToHR", formData.committedToHR);
-    formBody.append(
-      "interestedInPaidProgram",
-      formData.interestedInPaidProgram
-    );
+      // Existing form details
+      formBody.append("fullName", formData.fullName);
+      formBody.append("phone", formData.phone);
+      formBody.append("email", formData.email);
+      formBody.append("completionYear", formData.completionYear);
+      formBody.append("degreeDepartment", formData.degreeDepartment);
+      formBody.append("committedToHR", formData.committedToHR);
+      formBody.append(
+        "interestedInPaidProgram",
+        formData.interestedInPaidProgram
+      );
 
-    await fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      body: formBody,
-      mode: "no-cors",
-    });
+      // =====================================
+      // ENQUIRY SOURCE: AD OR NORMAL WEBSITE
+      // =====================================
 
-    // Google Ads conversion tracking
-    if (typeof window.gtag === "function") {
-      window.gtag("event", "conversion", {
-        send_to: "AW-18488012702/jWXxCNnejaMdEJ7f4u9E",
+      // =====================================
+// ENQUIRY SOURCE: AD OR NORMAL WEBSITE
+// =====================================
+
+const params = new URLSearchParams(window.location.search);
+
+let enquirySource = "Normal Website";
+
+if (params.get("utm_campaign")) {
+  enquirySource = params.get("utm_campaign");
+} else if (params.get("utm_source")) {
+  enquirySource = params.get("utm_source");
+} else if (
+  params.has("gclid") ||
+  params.has("gbraid") ||
+  params.has("wbraid")
+) {
+  enquirySource = "Google Ads";
+} else if (params.has("fbclid")) {
+  enquirySource = "Meta Ads";
+}
+
+formBody.append("enquirySource", enquirySource);
+
+      // Submit to Google Sheets
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        body: formBody,
+        mode: "no-cors",
       });
+
+      // Google Ads conversion tracking
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "conversion", {
+          send_to: "AW-18488012702/jWXxCNnejaMdEJ7f4u9E",
+        });
+      }
+
+      // Success state
+      setIsSubmitting("success");
+
+      // Reset form
+      setFormData({
+        fullName: "",
+        phone: "",
+        email: "",
+        completionYear: "",
+        degreeDepartment: "",
+        committedToHR: "",
+        interestedInPaidProgram: "",
+      });
+
+      // Close popup
+      setTimeout(() => {
+        setOpen(false);
+        setIsSubmitting(false);
+      }, 2000);
+
+    } catch (error) {
+      setIsSubmitting("error");
+
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 2000);
     }
+  };
 
-    // Show success state
-    setIsSubmitting("success");
-
-    // Reset form
-    setFormData({
-      fullName: "",
-      phone: "",
-      email: "",
-      completionYear: "",
-      degreeDepartment: "",
-      committedToHR: "",
-      interestedInPaidProgram: "",
-    });
-
-    // Close popup after 2 seconds
-    setTimeout(() => {
-      setOpen(false);
-      setIsSubmitting(false);
-    }, 2000);
-
-  } catch (error) {
-    console.error("Form submission error:", error);
-
-    setIsSubmitting("error");
-
-    setTimeout(() => {
-      setIsSubmitting(false);
-    }, 2000);
-  }
-};
-
-
-
-
-
-
-
-
+  // =====================================
+  // POPUP CONTENT
+  // =====================================
 
   const popupContent = open && (
     <motion.div
@@ -172,7 +201,9 @@ const handleSubmit = async (e) => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* CLOSE BUTTON */}
+
         <button
+          type="button"
           onClick={() => setOpen(false)}
           style={{
             position: "absolute",
@@ -193,6 +224,7 @@ const handleSubmit = async (e) => {
         </button>
 
         {/* HEADER */}
+
         <div className="pr-10">
           <h2 className="text-xl md:text-3xl font-bold text-black">
             Book Your Slot
@@ -204,11 +236,13 @@ const handleSubmit = async (e) => {
         </div>
 
         {/* FORM */}
+
         <form
           onSubmit={handleSubmit}
           className="md:mt-8 mt-5 space-y-5"
         >
           {/* FULL NAME */}
+
           <div className="flex flex-col items-start">
             <label className="text-xs md:text-sm font-medium text-gray-700">
               Full Name
@@ -221,19 +255,12 @@ const handleSubmit = async (e) => {
               onChange={handleChange}
               required
               placeholder="Enter your full name"
-              className="
-                w-full mt-2 px-4 py-3 rounded-xl
-                placeholder:text-gray-500
-                text-sm md:text-base
-                border border-gray-300
-                outline-none
-                focus:border-[#4043FE]
-                focus:ring-1 focus:ring-[#4043FE]
-              "
+              className="w-full mt-2 px-4 py-3 rounded-xl placeholder:text-gray-500 text-sm md:text-base border border-gray-300 outline-none focus:border-[#4043FE] focus:ring-1 focus:ring-[#4043FE]"
             />
           </div>
 
           {/* PHONE */}
+
           <div className="flex flex-col items-start">
             <label className="text-xs md:text-sm font-medium text-gray-700">
               Phone Number
@@ -248,19 +275,12 @@ const handleSubmit = async (e) => {
               placeholder="Enter phone number"
               pattern="[0-9]{10}"
               maxLength={10}
-              className="
-                w-full mt-2 px-4 py-3 rounded-xl
-                placeholder:text-gray-500
-                text-sm md:text-base
-                border border-gray-300
-                outline-none
-                focus:border-[#4043FE]
-                focus:ring-1 focus:ring-[#4043FE]
-              "
+              className="w-full mt-2 px-4 py-3 rounded-xl placeholder:text-gray-500 text-sm md:text-base border border-gray-300 outline-none focus:border-[#4043FE] focus:ring-1 focus:ring-[#4043FE]"
             />
           </div>
 
           {/* EMAIL */}
+
           <div className="flex flex-col items-start">
             <label className="text-xs md:text-sm font-medium text-gray-700">
               E-Mail ID
@@ -273,19 +293,12 @@ const handleSubmit = async (e) => {
               onChange={handleChange}
               required
               placeholder="Enter your email address"
-              className="
-                w-full mt-2 px-4 py-3 rounded-xl
-                placeholder:text-gray-500
-                text-sm md:text-base
-                border border-gray-300
-                outline-none
-                focus:border-[#4043FE]
-                focus:ring-1 focus:ring-[#4043FE]
-              "
+              className="w-full mt-2 px-4 py-3 rounded-xl placeholder:text-gray-500 text-sm md:text-base border border-gray-300 outline-none focus:border-[#4043FE] focus:ring-1 focus:ring-[#4043FE]"
             />
           </div>
 
-          {/* YEAR OF UG / PG COMPLETION */}
+          {/* COMPLETION YEAR */}
+
           <div className="flex flex-col items-start">
             <label className="text-xs md:text-sm font-medium text-gray-700">
               Year of UG/PG Completion
@@ -298,19 +311,12 @@ const handleSubmit = async (e) => {
               onChange={handleChange}
               required
               placeholder="Example: 2025"
-              className="
-                w-full mt-2 px-4 py-3 rounded-xl
-                placeholder:text-gray-500
-                text-sm md:text-base
-                border border-gray-300
-                outline-none
-                focus:border-[#4043FE]
-                focus:ring-1 focus:ring-[#4043FE]
-              "
+              className="w-full mt-2 px-4 py-3 rounded-xl placeholder:text-gray-500 text-sm md:text-base border border-gray-300 outline-none focus:border-[#4043FE] focus:ring-1 focus:ring-[#4043FE]"
             />
           </div>
 
-          {/* DEGREE & DEPARTMENT */}
+          {/* DEGREE AND DEPARTMENT */}
+
           <div className="flex flex-col items-start">
             <label className="text-xs md:text-sm font-medium text-gray-700">
               Degree & Department of UG/PG
@@ -323,19 +329,12 @@ const handleSubmit = async (e) => {
               onChange={handleChange}
               required
               placeholder="Example: B.Com - Commerce"
-              className="
-                w-full mt-2 px-4 py-3 rounded-xl
-                placeholder:text-gray-500
-                text-sm md:text-base
-                border border-gray-300
-                outline-none
-                focus:border-[#4043FE]
-                focus:ring-1 focus:ring-[#4043FE]
-              "
+              className="w-full mt-2 px-4 py-3 rounded-xl placeholder:text-gray-500 text-sm md:text-base border border-gray-300 outline-none focus:border-[#4043FE] focus:ring-1 focus:ring-[#4043FE]"
             />
           </div>
 
           {/* HR COMMITMENT */}
+
           <div className="flex flex-col items-start">
             <label className="text-xs md:text-sm font-medium text-gray-700">
               Are you committed to learning HR skills?
@@ -346,15 +345,7 @@ const handleSubmit = async (e) => {
               value={formData.committedToHR}
               onChange={handleChange}
               required
-              className="
-                w-full mt-2 px-4 py-3 rounded-xl
-                text-sm md:text-base
-                border border-gray-300
-                outline-none
-                bg-white
-                focus:border-[#4043FE]
-                focus:ring-1 focus:ring-[#4043FE]
-              "
+              className="w-full mt-2 px-4 py-3 rounded-xl text-sm md:text-base border border-gray-300 outline-none bg-white focus:border-[#4043FE] focus:ring-1 focus:ring-[#4043FE]"
             >
               <option value="">Select an option</option>
               <option value="Yes">Yes</option>
@@ -363,6 +354,7 @@ const handleSubmit = async (e) => {
           </div>
 
           {/* PAID PROGRAM */}
+
           <div className="flex flex-col items-start">
             <label className="text-xs md:text-sm font-medium text-gray-700">
               It's a paid program. Are you interested?
@@ -373,15 +365,7 @@ const handleSubmit = async (e) => {
               value={formData.interestedInPaidProgram}
               onChange={handleChange}
               required
-              className="
-                w-full mt-2 px-4 py-3 rounded-xl
-                text-sm md:text-base
-                border border-gray-300
-                outline-none
-                bg-white
-                focus:border-[#4043FE]
-                focus:ring-1 focus:ring-[#4043FE]
-              "
+              className="w-full mt-2 px-4 py-3 rounded-xl text-sm md:text-base border border-gray-300 outline-none bg-white focus:border-[#4043FE] focus:ring-1 focus:ring-[#4043FE]"
             >
               <option value="">Select an option</option>
               <option value="Yes">Yes</option>
@@ -390,51 +374,60 @@ const handleSubmit = async (e) => {
           </div>
 
           {/* SUBMIT BUTTON */}
+
           <button
-  type="submit"
-  disabled={isSubmitting === true || isSubmitting === "success"}
-  style={{
-    backgroundColor:
-      isSubmitting === "success"
-        ? "#16A34A"
-        : isSubmitting === "error"
-        ? "#DC2626"
-        : isSubmitting === true
-        ? "#999"
-        : submitBtnBg,
+            type="submit"
+            disabled={
+              isSubmitting === true ||
+              isSubmitting === "success"
+            }
+            style={{
+              backgroundColor:
+                isSubmitting === "success"
+                  ? "#16A34A"
+                  : isSubmitting === "error"
+                  ? "#DC2626"
+                  : isSubmitting === true
+                  ? "#999"
+                  : submitBtnBg,
 
-    width: "100%",
-    color: "white",
-    padding: "0.75rem",
-    borderRadius: "0.75rem",
-    fontWeight: "600",
-    border: "none",
+              width: "100%",
+              color: "white",
+              padding: "0.75rem",
+              borderRadius: "0.75rem",
+              fontWeight: "600",
+              border: "none",
 
-    cursor:
-      isSubmitting === true ||
-      isSubmitting === "success"
-        ? "not-allowed"
-        : "pointer",
+              cursor:
+                isSubmitting === true ||
+                isSubmitting === "success"
+                  ? "not-allowed"
+                  : "pointer",
 
-    transition: "all 0.3s ease",
-  }}
->
-  {isSubmitting === true
-    ? "Submitting..."
-    : isSubmitting === "success"
-    ? "Submitted Successfully ✓"
-    : isSubmitting === "error"
-    ? "Submission Failed ✕"
-    : "Submit Details"}
-</button>
+              transition: "all 0.3s ease",
+            }}
+          >
+            {isSubmitting === true
+              ? "Submitting..."
+              : isSubmitting === "success"
+              ? "Submitted Successfully ✓"
+              : isSubmitting === "error"
+              ? "Submission Failed ✕"
+              : "Submit Details"}
+          </button>
         </form>
       </motion.div>
     </motion.div>
   );
 
+  // =====================================
+  // MAIN COMPONENT
+  // =====================================
+
   return (
     <>
       {/* CTA BUTTON */}
+
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -444,38 +437,25 @@ const handleSubmit = async (e) => {
           type: "spring",
           stiffness: 200,
         }}
-        className="inline-block  hover:scale-105  transition-transform p-[1.5px] rounded-xl "
+        className="inline-block hover:scale-105 transition-transform p-[1.5px] rounded-xl"
         style={{
           background: `linear-gradient(to right, ${gradientFrom}, ${gradientTo})`,
         }}
       >
         <button
+          type="button"
           onClick={() => setOpen(true)}
           style={{
             backgroundColor: buttonBg,
           }}
-          className={`
-            md:px-8
-            md:py-3 
-            px-6 py-3
-            rounded-xl
-            text-sm
-            lg:text-lg
-            flex
-            items-center
-            gap-2
-            
-            transition-all
-            duration-300
-            cursor-pointer
-            ${className}
-          `}
+          className={`md:px-8 md:py-3 px-6 py-3 rounded-xl text-sm lg:text-lg flex items-center gap-2 transition-all duration-300 cursor-pointer ${className}`}
         >
           {buttonText}
         </button>
       </motion.div>
 
       {/* POPUP PORTAL */}
+
       {mounted &&
         createPortal(
           <AnimatePresence>
