@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
 const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbx6l764dWsOGEM4GadbS81TpolfHrMdr8PO44z_dqJs2XXnpu6w8dPSwij0U4yvIPUNjw/exec";
+  "https://script.google.com/macros/s/AKfycbzSeOkiH2WWbAX1ldz8nPY_31N21qEVN6dV9_J_mwSTbfkLldxY2NId3iLZIZPcNxwlXw/exec";
 
 export default function CTAButtonPopup({
   buttonText = "Book Your Seat Now",
