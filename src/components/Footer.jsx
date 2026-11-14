@@ -91,7 +91,7 @@ export default function CTASection() {
   const baseContacts = [
     "6382974304",
     "7538864115",
-    "7695967560",
+    "6379916460",
   ];
 
   /* ---------------- MONTHLY CONTACT ROTATION ---------------- */
